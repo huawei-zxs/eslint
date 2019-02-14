@@ -72,7 +72,12 @@ ruleTester.run("getter-return", rule, {
         "var foo = { bar: function(){return;} };",
         "var foo = { bar: function(){return true;} };",
         "var foo = { get: function () {} }",
-        "var foo = { get: () => {}};"
+        "var foo = { get: () => {}};",
+
+        // setters are not getters and should not be checked.
+        "var foo = { set bar(v) {} };",
+        "var foo = { set bar(v) { this._bar = v; } };",
+        "class foo { set bar(v) {} }"
     ],
 
     invalid: [
