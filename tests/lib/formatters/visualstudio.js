@@ -56,6 +56,24 @@ describe("formatter:visualstudio", () => {
         });
     });
 
+    describe("when passed an error message without a ruleId", () => {
+        const code = [{
+            filePath: "foo.js",
+            messages: [{
+                message: "Unexpected foo.",
+                severity: 2,
+                line: 5,
+                column: 10
+            }]
+        }];
+
+        it("should return a string in the format filename(x,y): error : z for errors without a rule id", () => {
+            const result = formatter(code);
+
+            assert.strictEqual(result, "foo.js(5,10): error : Unexpected foo.\n\n1 problem");
+        });
+    });
+
     describe("when passed a fatal error message", () => {
         const code = [{
             filePath: "foo.js",
