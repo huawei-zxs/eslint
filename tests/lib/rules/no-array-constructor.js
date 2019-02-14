@@ -33,6 +33,8 @@ ruleTester.run("no-array-constructor", rule, {
         { code: "new Array()", errors: [{ messageId: "preferLiteral", type: "NewExpression" }] },
         { code: "new Array", errors: [{ messageId: "preferLiteral", type: "NewExpression" }] },
         { code: "new Array(x, y)", errors: [{ messageId: "preferLiteral", type: "NewExpression" }] },
-        { code: "new Array(0, 1, 2)", errors: [{ messageId: "preferLiteral", type: "NewExpression" }] }
+        { code: "new Array(0, 1, 2)", errors: [{ messageId: "preferLiteral", type: "NewExpression" }] },
+        { code: "Array()", errors: [{ messageId: "preferLiteral", type: "CallExpression" }] },
+        { code: "Array(x, y)", errors: [{ messageId: "preferLiteral", type: "CallExpression" }] }
     ]
 });
