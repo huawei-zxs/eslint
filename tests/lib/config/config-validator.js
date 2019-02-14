@@ -340,6 +340,28 @@ describe("Validator", () => {
                 assert.throws(fn, "ESLint configuration in tests is invalid:\n\t- \"overrides[0]\" should have required property 'files'. Value: {\"rules\":{}}.\n");
             });
 
+            it("should throw if a non-first override has invalid rule options", () => {
+                const fn = validator.validate.bind(null, {
+                    overrides: [
+                        { files: "*.js", rules: { "mock-rule": [2, "second"] } },
+                        { files: "*.ts", rules: { "mock-rule": [3, "third"] } }
+                    ]
+                }, "tests", ruleMapper, linter.environments);
+
+                assert.throws(fn, "tests:\n\tConfiguration for rule \"mock-rule\" is invalid:\n\tSeverity should be one of the following: 0 = off, 1 = warn, 2 = error (you passed '3').\n");
+            });
+
+            it("should throw if a non-first override has an unknown environment", () => {
+                const fn = validator.validate.bind(null, {
+                    overrides: [
+                        { files: "*.js", env: { browser: true } },
+                        { files: "*.ts", env: { browser: true, invalid: true } }
+                    ]
+                }, "tests", ruleMapper, linter.environments);
+
+                assert.throws(fn, "Environment key \"invalid\" is unknown\n");
+            });
+
             it("should throw if override has an empty files array", () => {
                 const fn = validator.validate.bind(null, { overrides: [{ files: [] }] }, "tests", ruleMapper, linter.environments);
 
