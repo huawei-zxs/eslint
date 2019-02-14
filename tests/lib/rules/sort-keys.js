@@ -37,6 +37,10 @@ ruleTester.run("sort-keys", rule, {
         { code: "var obj = {a:1, ...z, b:1}", options: [], parserOptions: { ecmaVersion: 2018 } },
         { code: "var obj = {b:1, ...z, a:1}", options: [], parserOptions: { ecmaVersion: 2018 } },
 
+        // spread elements outside object literals should not crash the rule
+        { code: "function fn(...args) { return [...args].length; }", options: [], parserOptions: { ecmaVersion: 2018 } },
+        { code: "function g() {}; function f(...args) { return g(...args); }", options: [], parserOptions: { ecmaVersion: 2018 } },
+
         // ignore destructuring patterns.
         { code: "let {a, b} = {}", options: [], parserOptions: { ecmaVersion: 6 } },
 
