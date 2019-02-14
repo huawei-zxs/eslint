@@ -599,6 +599,16 @@ ruleTester.run("id-match", rule, {
                     type: "Identifier"
                 }
             ]
+        },
+        {
+            code: "var FooBar = 1;",
+            options: ["^[a-z]+\\-[a-z]+$"],
+            errors: [
+                {
+                    message: "Identifier 'FooBar' does not match the pattern '^[a-z]+\\-[a-z]+$'.",
+                    type: "Identifier"
+                }
+            ]
         }
     ]
 });
