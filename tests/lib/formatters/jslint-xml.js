@@ -10,7 +10,8 @@
 //------------------------------------------------------------------------------
 
 const assert = require("chai").assert,
-    formatter = require("../../../lib/formatters/jslint-xml");
+    formatter = require("../../../lib/formatters/jslint-xml"),
+    CLIEngine = require("../../../lib/cli-engine");
 
 //------------------------------------------------------------------------------
 // Tests
@@ -171,6 +172,37 @@ describe("formatter:jslint-xml", () => {
             const result = formatter(code);
 
             assert.strictEqual(result, "<?xml version=\"1.0\" encoding=\"utf-8\"?><jslint><file name=\"foo.js\"><issue line=\"5\" char=\"10\" evidence=\"\" reason=\"\" /></file></jslint>");
+        });
+    });
+    describe("when passed no results", () => {
+
+        it("should return a string in JSLint XML format with no files", () => {
+            const result = formatter([]);
+
+            assert.strictEqual(result, "<?xml version=\"1.0\" encoding=\"utf-8\"?><jslint></jslint>");
+        });
+    });
+
+    describe("when retrieved through CLIEngine.getFormatter", () => {
+
+        it("should return a function that formats results as JSLint XML", () => {
+            const publicFormatter = CLIEngine.getFormatter("jslint-xml");
+
+            assert.isFunction(publicFormatter);
+
+            const result = publicFormatter([{
+                filePath: "foo.js",
+                messages: [{
+                    message: "Unexpected foo.",
+                    severity: 2,
+                    line: 5,
+                    column: 10,
+                    ruleId: "foo",
+                    source: "foo"
+                }]
+            }]);
+
+            assert.strictEqual(result, "<?xml version=\"1.0\" encoding=\"utf-8\"?><jslint><file name=\"foo.js\"><issue line=\"5\" char=\"10\" evidence=\"foo\" reason=\"Unexpected foo. (foo)\" /></file></jslint>");
         });
     });
 });
