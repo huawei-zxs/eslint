@@ -1115,6 +1115,19 @@ describe("Linter", () => {
             assert.strictEqual(messages.length, 0);
         });
 
+        it("should be configurable by setting the string value with mixed case", () => {
+            const rule = "semi",
+                config = { rules: {} };
+
+            config.rules[rule] = "Warn";
+
+            const messages = linter.verify(code, config, filename, true);
+
+            assert.strictEqual(messages.length, 1);
+            assert.strictEqual(messages[0].severity, 1);
+            assert.strictEqual(messages[0].ruleId, rule);
+        });
+
         it("should process empty config", () => {
             const config = {};
             const messages = linter.verify(code, config, filename, true);
