@@ -2745,6 +2745,22 @@ describe("Linter", () => {
             assert.isTrue(messages[0].fatal);
             assert.match(messages[0].message, /^Parsing error:/);
         });
+
+        it("should report the correct line for parse errors that occur after the first line", () => {
+            const inValidCode = [
+                "var a = 1;",
+                "var b = 2;",
+                "var c = ;",
+                "var d = 4;"
+            ];
+            const messages = linter.verify(inValidCode.join("\n"));
+
+            assert.strictEqual(messages.length, 1);
+            assert.strictEqual(messages[0].line, 3);
+            assert.strictEqual(messages[0].column, 9);
+            assert.isTrue(messages[0].fatal);
+            assert.match(messages[0].message, /^Parsing error:/);
+        });
     });
 
     describe("when using an invalid (undefined) rule", () => {
