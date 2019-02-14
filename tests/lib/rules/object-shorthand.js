@@ -215,6 +215,24 @@ ruleTester.run("object-shorthand", rule, {
             parserOptions: { ecmaVersion: 2018 }
         },
 
+        // setters are ignored in consistency checks
+        {
+            code: "var x = {a, b, set foo(v) {}}",
+            options: ["consistent"]
+        },
+        {
+            code: "var x = {a, get foo() { return 1; }, set foo(v) {}}",
+            options: ["consistent"]
+        },
+        {
+            code: "var x = {set foo(v) {}, a, b}",
+            options: ["consistent"]
+        },
+        {
+            code: "var x = {a, b, set foo(v) {}}",
+            options: ["consistent-as-needed"]
+        },
+
         // consistent-as-needed
         {
             code: "var x = {a, b}",
