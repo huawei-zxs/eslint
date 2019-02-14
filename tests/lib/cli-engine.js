@@ -139,6 +139,37 @@ describe("CLIEngine", () => {
             assert.strictEqual(report.results[0].fixableWarningCount, 0);
         });
 
+        it("should report recommended rules when extending eslint:recommended", () => {
+
+            engine = new CLIEngine({
+                useEslintrc: false,
+                baseConfig: { extends: "eslint:recommended" }
+            });
+
+            const report = engine.executeOnText("var a; var a;", "file.js");
+
+            assert.strictEqual(report.results.length, 1);
+            assert.strictEqual(report.errorCount, 2);
+            assert.strictEqual(report.results[0].messages.length, 2);
+            assert.isTrue(report.results[0].messages.some(message => message.ruleId === "no-redeclare"));
+            assert.isTrue(report.results[0].messages.some(message => message.ruleId === "no-unused-vars"));
+        });
+
+        it("should not report non-recommended rules when extending eslint:recommended", () => {
+
+            engine = new CLIEngine({
+                useEslintrc: false,
+                baseConfig: { extends: "eslint:recommended" }
+            });
+
+            const report = engine.executeOnText("function foo() { return 1 }\nfoo();", "file.js");
+
+            assert.strictEqual(report.results.length, 1);
+            assert.strictEqual(report.errorCount, 0);
+            assert.strictEqual(report.warningCount, 0);
+            assert.strictEqual(report.results[0].messages.length, 0);
+        });
+
         it("should report the total and per file warnings when using local cwd .eslintrc", () => {
 
             engine = new CLIEngine({

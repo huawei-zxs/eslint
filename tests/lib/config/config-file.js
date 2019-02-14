@@ -225,6 +225,23 @@ describe("ConfigFile", () => {
 
         });
 
+        it("should apply only recommended rules when extends config includes 'eslint:recommended'", () => {
+
+            const configDeps = {
+                "../util/module-resolver": createStubModuleResolver({})
+            };
+            const StubbedConfigFile = proxyquire("../../../lib/config/config-file", configDeps);
+            const config = StubbedConfigFile.applyExtends({
+                extends: "eslint:recommended"
+            }, configContext, "/whatever");
+
+            assert.strictEqual(config.rules["no-redeclare"], "error");
+            assert.strictEqual(config.rules["no-undef"], "error");
+            assert.strictEqual(config.rules.semi, "off");
+            assert.strictEqual(config.rules.curly, "off");
+
+        });
+
         it("should throw an error when extends config module is not found", () => {
 
             const configDeps = {
