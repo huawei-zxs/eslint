@@ -48,7 +48,7 @@ const topLevelConfigProperties = Object.assign(
     baseConfigProperties,
     {
         extends: { type: ["string", "array"] },
-        root: { type: "boolean" },
+        root: { type: "string" },
         overrides: {
             type: "array",
             items: {

@@ -145,6 +145,10 @@ describe("Validator", () => {
         });
 
         describe("root", () => {
+            it("should not throw with a boolean value", () => {
+                validator.validate({ root: true }, null, ruleMapper, linter.environments);
+            });
+
             it("should throw with a string value", () => {
                 const fn = validator.validate.bind(null, { root: "true" }, null, ruleMapper, linter.environments);
 
