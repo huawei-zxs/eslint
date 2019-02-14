@@ -318,6 +318,34 @@ describe("ConfigOps", () => {
             assert.deepStrictEqual(config[1], { rules: { "no-mixed-requires": "error" } });
         });
 
+        it("should keep rule options from the base config when the override has only a numeric severity in an array", () => {
+
+            const config = [
+                { rules: { "no-mixed-requires": [1, "nconf", "underscore"] } },
+                { rules: { "no-mixed-requires": [2] } }
+            ];
+
+            const result = ConfigOps.merge(config[0], config[1]);
+
+            assert.deepStrictEqual(result.rules["no-mixed-requires"], [2, "nconf", "underscore"]);
+            assert.deepStrictEqual(config[0], { rules: { "no-mixed-requires": [1, "nconf", "underscore"] } });
+            assert.deepStrictEqual(config[1], { rules: { "no-mixed-requires": [2] } });
+        });
+
+        it("should keep rule options from the base config when the override has only a string severity in an array", () => {
+
+            const config = [
+                { rules: { "no-mixed-requires": [1, "nconf", "underscore"] } },
+                { rules: { "no-mixed-requires": ["error"] } }
+            ];
+
+            const result = ConfigOps.merge(config[0], config[1]);
+
+            assert.deepStrictEqual(result.rules["no-mixed-requires"], ["error", "nconf", "underscore"]);
+            assert.deepStrictEqual(config[0], { rules: { "no-mixed-requires": [1, "nconf", "underscore"] } });
+            assert.deepStrictEqual(config[1], { rules: { "no-mixed-requires": ["error"] } });
+        });
+
         it("should combine extends correctly", () => {
 
             const config = [
