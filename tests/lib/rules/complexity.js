@@ -73,7 +73,8 @@ ruleTester.run("complexity", rule, {
         { code: "var a = (x) => {do {'foo';} while (true)}", options: [2], parserOptions: { ecmaVersion: 6 } },
 
         // object property options
-        { code: "function b(x) {}", options: [{ max: 1 }] }
+        { code: "function b(x) {}", options: [{ max: 1 }] },
+        { code: "function maximumValid() {}", options: [{ maximum: 20 }] }
     ],
     invalid: [
         { code: "function a(x) {}", options: [0], errors: [makeError("Function 'a'", 1)] },
@@ -108,6 +109,7 @@ ruleTester.run("complexity", rule, {
         },
 
         // object property options
-        { code: "function a(x) {}", options: [{ max: 0 }], errors: [makeError("Function 'a'", 1)] }
+        { code: "function a(x) {}", options: [{ max: 0 }], errors: [makeError("Function 'a'", 1)] },
+        { code: "function maximumOne(x) {if (x) {return x;}}", options: [{ maximum: 1 }], errors: [makeError("Function 'maximumOne'", 2)] }
     ]
 });
