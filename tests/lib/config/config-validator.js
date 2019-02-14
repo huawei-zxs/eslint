@@ -323,6 +323,12 @@ describe("Validator", () => {
 
                 assert.throws(fn, "tests:\n\tConfiguration for rule \"mock-no-options-rule\" is invalid:\n\tValue [\"extra\"] should NOT have more than 0 items.\n");
             });
+
+            it("should throw when a rule with required options is configured without options", () => {
+                const fn = validator.validate.bind(null, { rules: { "mock-required-options-rule": 2 } }, "tests", ruleMapper, linter.environments);
+
+                assert.throws(fn, "tests:\n\tConfiguration for rule \"mock-required-options-rule\" is invalid:\n\tValue [] should NOT have fewer than 1 items.\n");
+            });
         });
 
         describe("overrides", () => {
