@@ -132,6 +132,22 @@ ruleTester.run("no-extra-boolean-cast", rule, {
             }]
         },
         {
+            code: "x = !!foo ? bar : baz",
+            output: "x = foo ? bar : baz",
+            errors: [{
+                messageId: "unexpectedNegation",
+                type: "UnaryExpression"
+            }]
+        },
+        {
+            code: "Boolean(foo) ? bar : Boolean(baz)",
+            output: "foo ? bar : Boolean(baz)",
+            errors: [{
+                messageId: "unexpectedCall",
+                type: "CallExpression"
+            }]
+        },
+        {
             code: "for (; Boolean(foo);) {}",
             output: "for (; foo;) {}",
             errors: [{
