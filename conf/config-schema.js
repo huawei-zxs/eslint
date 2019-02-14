@@ -8,7 +8,7 @@
 const baseConfigProperties = {
     env: { type: "object" },
     globals: { type: "object" },
-    parser: { type: ["string", "null"] },
+    parser: { type: "string" },
     parserOptions: { type: "object" },
     plugins: { type: "array" },
     rules: { type: "object" },
