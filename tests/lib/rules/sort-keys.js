@@ -63,6 +63,7 @@ ruleTester.run("sort-keys", rule, {
         { code: "var obj = {'#':1, 'Z':2, À:3, è:4}", options: ["asc", { caseSensitive: false }] },
 
         // asc, natural
+        { code: "var obj = {1:1, 2:4, '11':2, A:3} // natural option regression", options: ["asc", { natural: true }] },
         { code: "var obj = {_:2, a:1, b:3} // asc, natural", options: ["asc", { natural: true }] },
         { code: "var obj = {a:1, b:3, c:2}", options: ["asc", { natural: true }] },
         { code: "var obj = {a:2, b:3, b_:1}", options: ["asc", { natural: true }] },
