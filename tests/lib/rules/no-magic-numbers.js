@@ -28,6 +28,13 @@ ruleTester.run("no-magic-numbers", rule, {
             env: { es6: true }
         },
         {
+            code: "const foo = 42;",
+            options: [{
+                enforceConst: true
+            }],
+            env: { es6: true }
+        },
+        {
             code: "var foo = 42;",
             options: [{
                 enforceConst: false
