@@ -40,6 +40,8 @@ ruleTester.run("no-self-assign", rule, {
         { code: "({a} = {a() {}})", parserOptions: { ecmaVersion: 6 } },
         { code: "({a} = {[a]: a})", parserOptions: { ecmaVersion: 6 } },
         { code: "({a, ...b} = {a, ...b})", parserOptions: { ecmaVersion: 2018 } },
+        { code: "({a: x} = {b: x})", parserOptions: { ecmaVersion: 6 } },
+        { code: "({a: x} = {b: y, c: x})", parserOptions: { ecmaVersion: 6 } },
         { code: "a.b = a.c", options: [{ props: true }] },
         { code: "a.b = c.b", options: [{ props: true }] },
         { code: "a.b = a[b]", options: [{ props: true }] },
