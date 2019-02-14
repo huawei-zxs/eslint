@@ -82,6 +82,39 @@ describe("ConfigOps", () => {
                 globals: Object.assign({}, environments.node.globals, environments.es6.globals)
             });
         });
+
+        it("should not override user-specified globals with environment globals", () => {
+            const config = {
+                env: {
+                    node: true
+                },
+                globals: {
+                    __dirname: "off"
+                },
+                rules: {
+                    foo: 2
+                }
+            };
+
+            const result = ConfigOps.applyEnvironments(config, envContext);
+
+            assert.strictEqual(result.globals.__dirname, "off");
+        });
+
+        it("should not override user-specified parserOptions with environment parserOptions", () => {
+            const config = {
+                env: {
+                    es6: true
+                },
+                parserOptions: {
+                    ecmaVersion: 5
+                }
+            };
+
+            const result = ConfigOps.applyEnvironments(config, envContext);
+
+            assert.strictEqual(result.parserOptions.ecmaVersion, 5);
+        });
     });
 
     describe("createEnvironmentConfig()", () => {
