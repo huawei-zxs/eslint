@@ -288,6 +288,12 @@ describe("Validator", () => {
                 validator.validate({ rules: { "mock-rule": ["warn", "second"] } }, "tests", ruleMapper, linter.environments);
             });
 
+            it("should catch invalid rule options when severity is warn", () => {
+                const fn = validator.validate.bind(null, { rules: { "mock-rule": ["warn", "third"] } }, "tests", ruleMapper, linter.environments);
+
+                assert.throws(fn, "tests:\n\tConfiguration for rule \"mock-rule\" is invalid:\n\tValue \"third\" should be equal to one of the allowed values.\n");
+            });
+
             it("should do nothing with a valid config when severity is error", () => {
                 validator.validate({ rules: { "mock-rule": ["error", "second"] } }, "tests", ruleMapper, linter.environments);
             });
@@ -450,6 +456,12 @@ describe("Validator", () => {
 
         it("should throw for incorrect configuration values", () => {
             const fn = validator.validateRuleOptions.bind(null, ruleMapper("mock-rule"), "mock-rule", [2, "frist"], "tests");
+
+            assert.throws(fn, "tests:\n\tConfiguration for rule \"mock-rule\" is invalid:\n\tValue \"frist\" should be equal to one of the allowed values.\n");
+        });
+
+        it("should throw for incorrect configuration values when severity is warn", () => {
+            const fn = validator.validateRuleOptions.bind(null, ruleMapper("mock-rule"), "mock-rule", ["warn", "frist"], "tests");
 
             assert.throws(fn, "tests:\n\tConfiguration for rule \"mock-rule\" is invalid:\n\tValue \"frist\" should be equal to one of the allowed values.\n");
         });
