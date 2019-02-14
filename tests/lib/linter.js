@@ -2687,6 +2687,20 @@ describe("Linter", () => {
         });
     });
 
+    describe("when evaluating code with uppercase string severity in inline config comment", () => {
+        it("should not report a parse error", () => {
+            const code = "/*eslint no-alert: WARN*/ alert('test');";
+
+            const config = { rules: { "no-alert": 1 } };
+
+            const messages = linter.verify(code, config, filename);
+
+            assert.strictEqual(messages.length, 1);
+            assert.strictEqual(messages[0].ruleId, "no-alert");
+            assert.strictEqual(messages[0].message, "Unexpected alert.");
+        });
+    });
+
     describe("when evaluating a file with a shebang", () => {
         const code = "#!bin/program\n\nvar foo;;";
 

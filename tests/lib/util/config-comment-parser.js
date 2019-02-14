@@ -87,6 +87,19 @@ describe("ConfigCommentParser", () => {
             });
         });
 
+        it("should parse JSON config with an uppercase string severity", () => {
+            const code = "no-alert: WARN";
+            const result = commentParser.parseJsonConfig(code, location);
+
+
+            assert.deepStrictEqual(result, {
+                success: true,
+                config: {
+                    "no-alert": "WARN"
+                }
+            });
+        });
+
         it("should parse JSON config with two items and options", () => {
             const code = "no-alert:off, semi: [2, always]";
             const result = commentParser.parseJsonConfig(code, location);
