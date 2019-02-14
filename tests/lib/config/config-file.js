@@ -210,6 +210,41 @@ describe("ConfigFile", () => {
 
         });
 
+        it("should apply configs in an extends array in order, with the last element taking the highest precedence", () => {
+
+            const resolvedPath1 = path.resolve(PROJECT_PATH, "./node_modules/eslint-config-foo/index.js"),
+                resolvedPath2 = path.resolve(PROJECT_PATH, "./node_modules/eslint-config-bar/index.js");
+
+            const configDeps = {
+
+                // Hacky: need to override isFile for each call for testing
+                "../util/module-resolver": createStubModuleResolver({
+                    "eslint-config-foo": resolvedPath1,
+                    "eslint-config-bar": resolvedPath2
+                }),
+                "import-fresh"(filename) {
+                    return configDeps[filename];
+                }
+            };
+
+            configDeps[resolvedPath1] = {
+                rules: { quotes: 1 }
+            };
+
+            configDeps[resolvedPath2] = {
+                rules: { quotes: 2 }
+            };
+
+            const StubbedConfigFile = proxyquire("../../../lib/config/config-file", configDeps);
+
+            const config = StubbedConfigFile.applyExtends({
+                extends: ["foo", "bar"]
+            }, configContext, "/whatever");
+
+            assert.strictEqual(config.rules.quotes, 2);
+
+        });
+
         it("should apply all rules when extends config includes 'eslint:all'", () => {
 
             const configDeps = {
