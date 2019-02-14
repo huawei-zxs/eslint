@@ -493,6 +493,21 @@ describe("ConfigOps", () => {
                 assert.deepStrictEqual(result, expectedResult);
             });
 
+            it("should keep override entries separate when merging configs with overrides", () => {
+                const baseConfig = { overrides: [{ files: ["**/*.test.js"], rules: { "no-console": "off" } }] };
+                const customConfig = { overrides: [{ files: ["**/*.jsx"], rules: { "no-unused-vars": "warn" } }] };
+                const expectedResult = {
+                    overrides: [
+                        { files: ["**/*.test.js"], rules: { "no-console": "off" } },
+                        { files: ["**/*.jsx"], rules: { "no-unused-vars": "warn" } }
+                    ]
+                };
+
+                const result = ConfigOps.merge(baseConfig, customConfig);
+
+                assert.deepStrictEqual(result, expectedResult);
+            });
+
             it("should work if the base config doesn’t have an overrides property", () => {
                 const baseConfig = {};
                 const customConfig = { overrides: [{ files: ["**/*.jsx"], ecmaFeatures: { jsx: true } }] };
