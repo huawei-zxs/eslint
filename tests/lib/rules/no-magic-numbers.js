@@ -61,6 +61,18 @@ ruleTester.run("no-magic-numbers", rule, {
             }]
         },
         {
+            code: "var data = ['foo', 'bar', 'baz']; var third = data[0];",
+            options: [{
+                ignoreArrayIndexes: true
+            }]
+        },
+        {
+            code: "var data = ['foo', 'bar', 'baz']; var value = data[0][1];",
+            options: [{
+                ignoreArrayIndexes: true
+            }]
+        },
+        {
             code: "var a = <input maxLength={10} />;",
             parserOptions: {
                 ecmaFeatures: {
@@ -85,6 +97,15 @@ ruleTester.run("no-magic-numbers", rule, {
             }],
             errors: [{ messageId: "useConst" }],
             env: { es6: true }
+        },
+        {
+            code: "var data = ['foo', 'bar', 'baz']; var third = data[3];",
+            options: [{
+                ignoreArrayIndexes: false
+            }],
+            errors: [
+                { messageId: "noMagic", data: { raw: "3" } }
+            ]
         },
         {
             code: "var foo = 0 + 1;",
